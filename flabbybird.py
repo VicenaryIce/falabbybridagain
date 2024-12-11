@@ -25,6 +25,7 @@ def restart():
     bird.rect.y = 450
     bird.rect.x = 25
     score = 0
+    bird.velocity = 0
     pipes.empty()
 
 
@@ -53,9 +54,17 @@ class Bird(pygame.sprite.Sprite):#Bird is child class, sprite class is the paren
                 self.velocity = 8
             if self.rect.y <= 700:
                 self.rect.y = self.rect.y+self.velocity
+            self.delay = self.delay+1
+
+            if self.delay>5:
+                    self.delay = 0
+                    self.pictures = self.pictures+1
+
+                    if self.pictures == 3:
+                        self.pictures = 0
         
        
-        if gameover == False :
+        if gameover == False:
 
             if pygame.mouse.get_pressed()[0] == True and clicked == False:
                 self.velocity = -6
@@ -65,17 +74,10 @@ class Bird(pygame.sprite.Sprite):#Bird is child class, sprite class is the paren
                 clicked = False 
         #flapping the wings:
 
-
-            self.delay = self.delay+1
-
-            if self.delay>5:
-                self.delay = 0
-                self.pictures = self.pictures+1
-
-                if self.pictures == 3:
-                    self.pictures = 0
+          
                 
-                
+                    
+                    
                 self.image = self.birdimages[self.pictures]
                 self.image = pygame.transform.rotate(self.birdimages[self.pictures],-2*self.velocity)
         else:
@@ -165,9 +167,9 @@ while True:
         button.draw()
         pos = pygame.mouse.get_pos()
         if button.rect.collidepoint(pos):
-            restart()
-            
-            gameover = False
+            if pygame.mouse.get_pressed()[0] == True:
+                restart()
+                gameover = False
 
     if bird.rect.y >= 700:
         gameover = True
